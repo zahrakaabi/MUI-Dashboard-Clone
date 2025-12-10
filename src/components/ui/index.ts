@@ -4,3 +4,7 @@ export * from './textarea';
 export * from './label';
 export * from './separator';
 export * from './collapsible';
+export * from './select';
+export * from './checkbox';
+export * from './button';
+export * from './popover';

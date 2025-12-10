@@ -1,0 +1,1 @@
+export { default as ProductAddEditView } from './product-add-edit-view';

@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 // UI Local Components
 import Layout from './layouts/dashboard/layout';
-import ProductAddView from './sections/product/view/product-add-view';
+import { ProductAddEditView } from './sections';
 
 // Styles
 import './App.css';
@@ -15,7 +15,7 @@ function App() {
 /* -------------------------------- RENDERING ------------------------------- */
   return (
     <Layout>
-      <ProductAddView />
+      <ProductAddEditView />
     </Layout>
   )
 }
