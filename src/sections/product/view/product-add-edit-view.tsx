@@ -19,7 +19,7 @@ import {
   RHFSelect, 
   RHFTextArea, 
   RHFTextField, 
-  //RHFUpload 
+  RHFUpload 
 } from "@/components/hook-form";
 
 // Utils
@@ -37,7 +37,7 @@ function ProductAddEditView() {
   const NewCurrentProductSchema = Yup.object().shape({
     Name: Yup.string().required('Name is required'),
     Description: Yup.string().required('Description is required'),
-    //upload
+    Attachments: Yup.array().min(1, 'Images sont obligé'),
     Product_Code: Yup.string().required('Product code is required'),
     Quantity: Yup.number().required('Quantity is required'),
     Category: Yup.string().required('Category is required'),
@@ -57,7 +57,7 @@ function ProductAddEditView() {
     () => ({ 
       Name: "", // currentProduct?.Name || "",
       Description: "",
-      //upload
+      Attachments: [] as File[],
       Product_Code: "",
       Quantity: 0,
       Category: "",
@@ -111,7 +111,9 @@ function ProductAddEditView() {
                   name="Description"
                   placeholder="Type product description here..."
                 />
-                {/*<RHFUpload />*/}
+                <RHFUpload
+                  name="Attachments"
+                />
               </>
             }
           />
