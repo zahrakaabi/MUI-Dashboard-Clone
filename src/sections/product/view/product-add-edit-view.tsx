@@ -37,7 +37,24 @@ function ProductAddEditView() {
   const NewCurrentProductSchema = Yup.object().shape({
     Name: Yup.string().required('Name is required'),
     Description: Yup.string().required('Description is required'),
-    Attachments: Yup.array().min(1, 'Images sont obligé'),
+    Attachments: Yup.array().of(
+      Yup.mixed<File>()
+        .test("fileType", "Only JPG, PNG or PDF allowed", (file) => {
+          if (!file) return false;
+          return [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "application/pdf",
+          ].includes(file.type);
+        })
+        .test("fileSize", "File must be less than 5MB", (file) => {
+          if (!file) return false;
+          return file.size <= 5 * 1024 * 1024;
+        })
+      )
+      .min(1, "Images are required")
+      .required("Images are required"),
     Product_Code: Yup.string().required('Product code is required'),
     Quantity: Yup.number().required('Quantity is required'),
     Category: Yup.string().required('Category is required'),

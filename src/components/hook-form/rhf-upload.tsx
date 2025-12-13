@@ -29,7 +29,7 @@ function RHFUpload({ name }: RHFUploadProps) {
     if (!filesList) return;
 
     const validTypes = ["image/png", "image/jpeg", "image/jpg", "application/pdf"];
-    const newFiles = Array.from(filesList).filter(file =>
+    const newFiles = Array.from(filesList).filter((file) =>
       validTypes.includes(file.type)
     );
 
