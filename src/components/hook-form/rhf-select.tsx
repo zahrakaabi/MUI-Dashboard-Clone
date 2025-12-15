@@ -8,7 +8,6 @@ import { Controller, useFormContext } from "react-hook-form";
 // UI Lib Components
 import { 
   Button,
-  Checkbox,
   Label,
   Popover,
   PopoverContent,
@@ -19,6 +18,9 @@ import {
   SelectValue 
 } from "../ui";
 import { ChevronDown } from "lucide-react";
+
+// UI Local Components
+import { RHFCheckbox } from "./rhf-checkbox";
 
 /* -------------------------------------------------------------------------- */
 /*                                 RHF SELECT                                 */
@@ -102,28 +104,23 @@ export function RHFMultiSelect({ name, placeholder, label, options }: RHFMultiSe
             <PopoverContent className="p-1" style={{ width: popoverWidth }}>
               <div className="grid w-full">
                 {options.map((option) => {
-                  const id = `${name}-${option}`;
                   const isChecked = field.value.includes(option);
                   const toggle = () => {
-                  const newValue = isChecked
-                    ? field.value.filter((value: string) => value !== option)
-                    : [...field.value, option];
+                    const newValue = isChecked
+                      ? field.value.filter((value: string) => value !== option)
+                      : [...field.value, option];
                     field.onChange(newValue);
                   };
                   return (
-                    <div key={option} 
-                    onClick={toggle}
-                    className="hover:bg-gray-100 rounded-md p-2 cursor-pointer flex items-center gap-2">
-                      <Checkbox id={id}
-                        className="cursor-pointer data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600 data-[state=checked]:text-white"
-                        checked={isChecked}
-                        onClick={(e) => e.stopPropagation()}
-                        onCheckedChange={toggle}
-                      />
-                      <Label className="text-sm font-normal cursor-pointer" htmlFor={id}>
-                        {option}
-                      </Label>
-                    </div>
+                    <RHFCheckbox
+                      key={option}
+                      name={`${name}-${option}`}
+                      className="hover:bg-gray-100 rounded-md p-2"
+                      label={option}
+                      checked={isChecked}
+                      onClick={toggle}
+                      onCheckedChange={toggle}
+                    />
                   )}
                 )}
               </div>

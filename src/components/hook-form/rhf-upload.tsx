@@ -78,7 +78,14 @@ function RHFUpload({ name }: RHFUploadProps) {
                 className="object-cover w-full h-full"
               />
             ) : (
-              <p className="text-center px-1">{file.name}</p>
+              <div className="flex flex-col items-center">
+                <img 
+                  src='https://cdn-icons-png.flaticon.com/512/4726/4726010.png'
+                  alt='pdf-icon'
+                  className="object-contain w-10 h-10"
+                />
+                <p className="text-center mt-2 px-1 max-w-[10ch] truncate">{file.name}</p>
+              </div>
             )}
           </div>
         );

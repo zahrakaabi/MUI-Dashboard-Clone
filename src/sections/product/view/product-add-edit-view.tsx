@@ -3,18 +3,19 @@
 /* -------------------------------------------------------------------------- */
 // Packages
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useSnackbar } from 'notistack';
 
 // UI Lib Components
-import { Label, SelectGroup, SelectItem, SelectLabel } from "@/components/ui";
+import { SelectGroup, SelectItem, SelectLabel } from "@/components/ui";
 
 // UI Local Components
 import CustomCard from "@/components/custom-card";
 import { 
   FormProvider,
-  RHFCheckbox,
+  RHFMultiCheckbox,
   RHFMultiSelect,
   RHFSelect, 
   RHFTextArea, 
@@ -28,24 +29,33 @@ import {
   PRODUCT_COLORS, 
   PRODUCTS_CATEGORIES 
 } from "@/_mock";
+import { useBoolean } from '@/hooks';
+import type { CATEGORY } from '@/types';
+import { generateId, generateSlug } from '@/utils/helpers';
 
 /* -------------------------------------------------------------------------- */
 /*                              PRODUCT ADD VIEW                              */
 /* -------------------------------------------------------------------------- */
 function ProductAddEditView() {
+/* ---------------------------------- HOOKS --------------------------------- */
+  const [categories, setCategories] = useState<CATEGORY[]>(PRODUCTS_CATEGORIES);
+
+/* ------------------------------ CUSTOM HOOKS ------------------------------ */
+  const loadingSend = useBoolean(false);
+  const { enqueueSnackbar } = useSnackbar();
+
 /* ---------------------------- VALIDATION SCHEMA --------------------------- */
   const NewCurrentProductSchema = Yup.object().shape({
-    Name: Yup.string().required('Name is required'),
-    Description: Yup.string().required('Description is required'),
-    Attachments: Yup.array().of(
+    title: Yup.string().required('Product Name is required'),
+    description: Yup.string().required('Description is required'),
+    images: Yup.array().of(
       Yup.mixed<File>()
-        .test("fileType", "Only JPG, PNG or PDF allowed", (file) => {
+        .test("fileType", "Only JPG, PNG allowed", (file) => {
           if (!file) return false;
           return [
             "image/jpeg",
             "image/jpg",
-            "image/png",
-            "application/pdf",
+            "image/png"
           ].includes(file.type);
         })
         .test("fileSize", "File must be less than 5MB", (file) => {
@@ -55,36 +65,34 @@ function ProductAddEditView() {
       )
       .min(1, "Images are required")
       .required("Images are required"),
-    Product_Code: Yup.string().required('Product code is required'),
-    Quantity: Yup.number().required('Quantity is required'),
-    Category: Yup.string().required('Category is required'),
-    Regular_Price: Yup.number().required('Regular price is required'),
-    Sale_Price: Yup.number().required('Sale price is required'),
-    Colors: Yup.array().min(1, 'Choose at least one color'),
-    Sizes: Yup.array().min(1, 'Choose at least one size'),
-    Men: Yup.boolean(),
-    Woman: Yup.boolean(),
-    Kids: Yup.boolean()
+    code: Yup.string().required('Product code is required'),
+    quantity: Yup.number().required('Quantity is required'),
+    subcategory: Yup.string().required('Category is required'),
+    prices: Yup.object({
+      regular: Yup.number().required('Regular price is required'),
+      sale: Yup.number().required('Sale price is required')
+    }),
+    colors: Yup.array().min(1, 'Choose at least one color'),
+    sizes: Yup.array().min(1, 'Choose at least one size'),
+    gender: Yup.string().required('Gender is required')
   });
-
-/* ---------------------------------- HOOKS --------------------------------- */
 
 /* -------------------------------- CONSTANTS ------------------------------- */
   const defaultValues = useMemo(
     () => ({ 
-      Name: "", // currentProduct?.Name || "",
-      Description: "",
-      Attachments: [] as File[],
-      Product_Code: "",
-      Quantity: 0,
-      Category: "",
-      Regular_Price: 0,
-      Sale_Price: 0,
-      Colors: [],
-      Sizes: [],
-      Men: false,
-      Woman: false,
-      Kids: false
+      title: "", // currentProduct?.Name || "",
+      description: "",
+      images: [] as File[],
+      code: "",
+      subcategory: "",
+      quantity: 0,
+      prices: {
+        regular: 0,
+        sale: 0
+      },
+      colors: [],
+      sizes: [],
+      gender: ""
     }),
     [] //[currentProduct]
   );
@@ -95,15 +103,53 @@ function ProductAddEditView() {
   });
 
   const {
-    //reset,
+    reset,
     //control,
     handleSubmit,
     //formState: { isSubmitting }
   } = methods;
 
 /* ----------------------------- HANDLER FUNCTIONS -------------------------- */
-  const handleEditAndSend = handleSubmit(async (data) => {
-    console.log('Form submitted', data);
+  const handleEditAndSend = handleSubmit(async (formData) => {
+    try {
+      loadingSend.onTrue();
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const productWithIdAndSlug = {
+        ...formData,
+        id: generateId('product'),
+        slug: generateSlug(formData.title),
+        gender: formData.gender.toLowerCase(),
+        images: formData.images.filter((file): file is File => file !== undefined).map((file) => URL.createObjectURL(file)),
+        colors: formData.colors || [],
+        sizes: formData.sizes || []
+      };
+
+      setCategories((prevCategories) => 
+        prevCategories.map((category) => {
+          const hasSubcategory = category.subcategories.some((sub) => sub.title === formData.subcategory);
+          if (!hasSubcategory) return category;
+          return {
+            ...category,
+            subcategories: category.subcategories.map(sub => {
+              if (sub.title !== formData.subcategory) return sub;
+              return {
+                ...sub,
+                products: [...sub.products, productWithIdAndSlug]
+              };
+            })
+          };
+        })
+      );
+
+      enqueueSnackbar('Update with success!');
+      reset();
+      
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loadingSend.onFalse();
+    };
   });
 
 /* -------------------------------- RENDERING ------------------------------- */
@@ -120,16 +166,16 @@ function ProductAddEditView() {
                 <RHFTextField
                   type="text"
                   label="Name"
-                  name="Name"
+                  name="title"
                   placeholder="Product title"
                 />
                 <RHFTextArea
                   label="Description"
-                  name="Description"
+                  name="description"
                   placeholder="Type product description here..."
                 />
                 <RHFUpload
-                  name="Attachments"
+                  name="images"
                 />
               </>
             }
@@ -144,19 +190,19 @@ function ProductAddEditView() {
                 <RHFTextField
                   type="text"
                   label="Product Code"
-                  name="Product_Code"
+                  name="code"
                   placeholder="Product Code"
                 />
                 <div className="flex gap-4 sm:flex-row sm:items-start flex-col">
                   <RHFTextField
                     type="number"
                     label="Quantity"
-                    name="Quantity"
+                    name="quantity"
                     placeholder="0"
                   />
                   {/* category (select) */}
                   <RHFSelect 
-                  name="Category"
+                  name="subcategory"
                   label="Category"
                   placeholder="Select a category"
                   children={PRODUCTS_CATEGORIES.map((category) => <SelectGroup key={category.id}>
@@ -173,23 +219,22 @@ function ProductAddEditView() {
                     options={PRODUCT_COLORS}
                     placeholder="Colors"
                     label='Colors'
-                    name='Colors'
+                    name='colors'
                   />
                   {/* sizes */}
                   <RHFMultiSelect
                     options={CLOTHING_SIZES}
                     placeholder="Sizes"
                     label='Sizes'
-                    name='Sizes'
+                    name='sizes'
                   />
                 </div>
                 {/* gender */}
-                <div className="form-group grid w-full items-center gap-3">
-                  <Label>Gender</Label>
-                  <div className="flex gap-4">
-                    {['Men', 'Woman', 'Kids'].map((gender) => <RHFCheckbox key={gender} name={gender} />)}
-                  </div>
-                </div>
+                <RHFMultiCheckbox
+                  name='gender'
+                  label='Gender'
+                  options={['Men', 'Woman', 'Kids']}
+                />
               </>
             }
           />
@@ -203,13 +248,13 @@ function ProductAddEditView() {
                 <RHFTextField
                   type="number"
                   label="Regular Price"
-                  name="Regular_Price"
+                  name="prices.regular"
                   placeholder="Regular Price"
                 />
                 <RHFTextField
                   type="number"
                   label="Sale Price"
-                  name="Sale_Price"
+                  name="prices.sale"
                   placeholder="Sale Price"
                 />
               </>

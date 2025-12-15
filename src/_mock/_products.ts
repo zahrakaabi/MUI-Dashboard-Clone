@@ -1,4 +1,13 @@
-export const PRODUCTS_CATEGORIES = [ //missing typing
+/* -------------------------------------------------------------------------- */
+/*                                DEPENDENCIES                                */
+/* -------------------------------------------------------------------------- */
+// Types
+import type { CATEGORY } from "@/types";
+
+/* -------------------------------------------------------------------------- */
+/*                        PRODUCTS CATEGORIES MOCK DATA                       */
+/* -------------------------------------------------------------------------- */
+export const PRODUCTS_CATEGORIES: CATEGORY[] = [ //missing typing
     {
         id: '000_1_category',
         title: 'Clothing',
@@ -17,13 +26,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_product',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
+                        code: '',
                         quantity: 20,
-                        regular_price: 20,
-                        sale_price: 60,
-                        color: '',
-                        size: 'M',
+                        prices: {
+                            regular: 20,
+                            sale: 60
+                        },
+                        colors: [],
+                        sizes: ['M'],
                         gender: 'woman'
                     }
                 ]
@@ -39,13 +51,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_xproduct',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
+                        code: '',
                         quantity: 20,
-                        regular_price: 20,
-                        sale_price: 60,
-                        color: '',
-                        size: 'XL',
+                        prices: {
+                            regular: 20,
+                            sale: 60
+                        },
+                        colors: [],
+                        sizes: ['XL'],
                         gender: 'kids'
                     }
                 ]
@@ -61,13 +76,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_mproduct',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
                         quantity: 10,
-                        regular_price: 20,
-                        sale_price: 30,
-                        color: '',
-                        size: 'L',
+                        code: '',
+                        prices: {
+                            regular: 20,
+                            sale: 30
+                        },
+                        colors: [],
+                        sizes: ['L'],
                         gender: 'men'
                     }
                 ]
@@ -83,13 +101,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_lmproduct',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
+                        code: '',
                         quantity: 20,
-                        regular_price: 20,
-                        sale_price: 20,
-                        color: '',
-                        size: 15,//in cm
+                        prices: {
+                            regular: 20,
+                            sale: 20
+                        },
+                        colors: [],
+                        sizes: [15],//in cm
                         gender: 'woman'
                     }
                 ]
@@ -114,13 +135,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_product2',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
+                        code: '',
                         quantity: 20,
-                        regular_price: 20,
-                        sale_price: 60,
-                        color: '',
-                        size: 'M',
+                        prices: {
+                            regular: 20,
+                            sale: 60
+                        },
+                        colors: [],
+                        sizes: ['M'],
                         gender: 'woman'
                     }
                 ]
@@ -136,13 +160,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_xproductjgug',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
+                        code: '',
                         quantity: 20,
-                        regular_price: 20,
-                        sale_price: 60,
-                        color: '',
-                        size: 'XL',
+                        prices: {
+                            regular: 20,
+                            sale: 60
+                        },
+                        colors: [],
+                        sizes: ['XL'],
                         gender: 'kids'
                     }
                 ]
@@ -158,13 +185,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_mproductjugug',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
+                        code: '',
                         quantity: 10,
-                        regular_price: 20,
-                        sale_price: 30,
-                        color: '',
-                        size: 'L',
+                        prices: {
+                            regular: 20,
+                            sale: 30
+                        },
+                        colors: [],
+                        sizes: ['L'],
                         gender: 'men'
                     }
                 ]
@@ -180,13 +210,16 @@ export const PRODUCTS_CATEGORIES = [ //missing typing
                         id: '000_1_khhhhjb',
                         title: '',
                         slug: '',
-                        image: '',
+                        images: [],
                         description: '',
+                        code: '',
                         quantity: 20,
-                        regular_price: 20,
-                        sale_price: 20,
-                        color: '',
-                        size: 15,//in cm
+                        prices: {
+                            regular: 20,
+                            sale: 20
+                        },
+                        colors: [],
+                        sizes: [15],//in cm
                         gender: 'woman'
                     }
                 ]

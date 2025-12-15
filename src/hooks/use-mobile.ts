@@ -1,8 +1,16 @@
+/* -------------------------------------------------------------------------- */
+/*                                DEPENDENCIES                                */
+/* -------------------------------------------------------------------------- */
+// Packages
 import * as React from "react"
 
+/* -------------------------------------------------------------------------- */
+/*                          USE IS MOBILE BREAKPOINT                          */
+/* -------------------------------------------------------------------------- */
 const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
+/* ---------------------------------- HOOKS --------------------------------- */
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
 
   React.useEffect(() => {
@@ -13,7 +21,8 @@ export function useIsMobile() {
     mql.addEventListener("change", onChange)
     setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     return () => mql.removeEventListener("change", onChange)
-  }, [])
+  }, []);
 
+/* -------------------------------- RENDERING ------------------------------- */
   return !!isMobile
-}
+};
