@@ -27,10 +27,10 @@ import {
 import { 
   CLOTHING_SIZES, 
   PRODUCT_COLORS, 
-  PRODUCTS_CATEGORIES 
+  CATEGORIES 
 } from "@/_mock";
 import { useBoolean } from '@/hooks';
-import type { CATEGORY } from '@/types';
+import type { CategoryNode } from '@/types';
 import { generateId, generateSlug } from '@/utils/helpers';
 
 /* -------------------------------------------------------------------------- */
@@ -38,7 +38,7 @@ import { generateId, generateSlug } from '@/utils/helpers';
 /* -------------------------------------------------------------------------- */
 function ProductAddEditView() {
 /* ---------------------------------- HOOKS --------------------------------- */
-  const [categories, setCategories] = useState<CATEGORY[]>(PRODUCTS_CATEGORIES);
+  const [categories, setCategories] = useState<CategoryNode[]>(CATEGORIES);
 
 /* ------------------------------ CUSTOM HOOKS ------------------------------ */
   const loadingSend = useBoolean(false);
@@ -74,7 +74,9 @@ function ProductAddEditView() {
     }),
     colors: Yup.array().min(1, 'Choose at least one color'),
     sizes: Yup.array().min(1, 'Choose at least one size'),
-    gender: Yup.string().required('Gender is required')
+    gender: Yup.string().required('Gender is required'),
+    stock: Yup.number(),
+    maxStock: Yup.number()
   });
 
 /* -------------------------------- CONSTANTS ------------------------------- */
@@ -92,7 +94,9 @@ function ProductAddEditView() {
       },
       colors: [],
       sizes: [],
-      gender: ""
+      gender: "",
+      stock: 0,
+      maxStock: 0
     }),
     [] //[currentProduct]
   );
@@ -120,6 +124,8 @@ function ProductAddEditView() {
         id: generateId('product'),
         slug: generateSlug(formData.title),
         gender: formData.gender.toLowerCase(),
+        stock: formData.stock || 20,
+        maxStock: 100,
         images: formData.images.filter((file): file is File => file !== undefined).map((file) => URL.createObjectURL(file)),
         colors: formData.colors || [],
         sizes: formData.sizes || []
@@ -127,15 +133,16 @@ function ProductAddEditView() {
 
       setCategories((prevCategories) => 
         prevCategories.map((category) => {
-          const hasSubcategory = category.subcategories.some((sub) => sub.title === formData.subcategory);
+          if (!category.children) return category;
+          const hasSubcategory = category.children.some((child) => child.title === formData.subcategory);
           if (!hasSubcategory) return category;
           return {
             ...category,
-            subcategories: category.subcategories.map(sub => {
-              if (sub.title !== formData.subcategory) return sub;
+            children: category.children.map((child) => {
+              if (child.title !== formData.subcategory) return child;
               return {
-                ...sub,
-                products: [...sub.products, productWithIdAndSlug]
+                ...child,
+                products: child.products && [...child.products, productWithIdAndSlug]
               };
             })
           };
@@ -205,10 +212,10 @@ function ProductAddEditView() {
                   name="subcategory"
                   label="Category"
                   placeholder="Select a category"
-                  children={PRODUCTS_CATEGORIES.map((category) => <SelectGroup key={category.id}>
+                  children={CATEGORIES.map((category) => <SelectGroup key={category.id}>
                     <SelectLabel>{category.title}</SelectLabel>
-                      {category.subcategories.map((subcateg) => <SelectItem key={subcateg.id} value={subcateg.title}>
-                        {subcateg.title}
+                      {category.children?.map((child) => <SelectItem key={child.id} value={child.title}>
+                        {child.title}
                       </SelectItem>)}
                     </SelectGroup>)}>
                   </RHFSelect>

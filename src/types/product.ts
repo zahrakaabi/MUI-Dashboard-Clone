@@ -1,38 +1,31 @@
 export type PRODUCT = {
-    id: string;
-    title: string;
-    slug: string;
-    images: string[];
-    description: string;
-    code : string;
-
-    quantity: number;
-
-    prices: {
-        regular: number;
-        sale: number;
-    };
-
-    colors: string[];
-    sizes: number [] | string[];
-    
-    gender: string
+  id: string;
+  title: string;
+  slug: string;
+  images: string[];
+  description: string;
+  code : string;
+  stock: number;
+  maxStock?: number;
+  quantity: number;
+  creationAt?: Date;
+  prices: {
+    regular: number;
+    sale: number;
+  };
+  colors: string[];
+  sizes: number [] | string[];
+  gender: string;
+  category?: Pick<CategoryNode, 'id' | 'title' | 'slug'>;
 };
 
-export type SUBCATEGORY = {
-    id: string;
-    title: string;
-    slug: string;
-    image: string;
-    description: string;
-    products: PRODUCT[]
-};
+export interface CategoryNode {
+  id: string;
+  title: string;
+  slug: string;
+  image?: string;
+  description?: string;
 
-export type CATEGORY = {
-    id: string;
-    title: string;
-    slug: string;
-    image: string;
-    description: string;
-    subcategories: SUBCATEGORY[]
+  children?: CategoryNode[];
+  products?: PRODUCT[];
 }

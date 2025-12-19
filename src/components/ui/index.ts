@@ -8,3 +8,5 @@ export * from './select';
 export * from './checkbox';
 export * from './button';
 export * from './popover';
+export * from './table';
+export * from './tooltip';

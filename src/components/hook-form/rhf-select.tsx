@@ -76,7 +76,7 @@ export function RHFMultiSelect({ name, placeholder, label, options }: RHFMultiSe
 
   useEffect(() => {
     if (buttonRef.current) setPopoverWidth(buttonRef.current.offsetWidth)
-  }, [buttonRef.current]); //selected
+  }, []); //selected
 
 /* -------------------------------- RENDERING ------------------------------- */
   return ( 
