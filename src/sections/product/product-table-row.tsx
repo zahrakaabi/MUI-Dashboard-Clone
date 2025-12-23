@@ -2,8 +2,11 @@
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
 // UI Lib Components
-import { Button, TableCell, TableRow, Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui";
-import { EllipsisVertical } from 'lucide-react';
+import { Button, DropdownMenu, DropdownMenuItem, DropdownMenuTrigger,TableCell, TableRow } from "@/components/ui";
+import { EllipsisVertical, Eye, Pencil, Trash2 } from 'lucide-react';
+
+// UI Local Components
+import { CustomPopover } from "@/components/custom-popover";
 
 // Utils
 import type { PRODUCT } from "@/types";
@@ -100,9 +103,28 @@ function ProductTableRow({
       <TableCell className="text-sm font-normal p-4 hover:text-blue-500 transition-all duration-200">${sale}</TableCell>
 
       <TableCell align="right">
-        <Button className="border-0 shadow-none bg-transparent rounded-full cursor-pointer" variant="outline">
-          <EllipsisVertical />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="border-0 shadow-none bg-transparent rounded-full cursor-pointer">
+              <EllipsisVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <CustomPopover align="end">
+            <DropdownMenuItem className="cursor-pointer">
+              <Eye />
+              <span>View</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={onEditRow}>
+              <Pencil />
+              <span>Edit</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={onDeleteRow}>
+              <Trash2 className="text-orange-500 " />
+              <span className="text-orange-500">Delete</span>
+            </DropdownMenuItem>
+          </CustomPopover>
+        </DropdownMenu>
       </TableCell>
     </TableRow>
   )
