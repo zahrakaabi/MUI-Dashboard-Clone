@@ -2,16 +2,11 @@
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
 // UI Lib Components
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { ScrollArea, Sidebar, SidebarContent } from "@/components/ui";
+
+// UI Local Components
+import Logo from "@/components/logo";
+import { NavSectionVertical } from "@/components/nav-section";
 
 // Utils
 import { useNavData } from "./config-navigation";
@@ -26,24 +21,12 @@ function AppSidebar() {
 /* -------------------------------- RENDERING ------------------------------- */
   return (
     <Sidebar>
-      <SidebarContent>
-        {navData.map((group) => (
-          <SidebarGroup key={group.subheader}>
-            <SidebarGroupLabel>{group.subheader}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
-      </SidebarContent>
+      <ScrollArea>
+        <SidebarContent>
+          <Logo className="mt-3 ml-4 mb-1" />
+          <NavSectionVertical data={navData} />
+        </SidebarContent>
+      </ScrollArea>
     </Sidebar>
   )
 }

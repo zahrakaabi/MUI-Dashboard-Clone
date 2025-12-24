@@ -1,18 +1,18 @@
 /* -------------------------------------------------------------------------- */
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App.tsx';
+// Packages
+import { Link, type LinkProps } from 'react-router-dom';
 
 /* -------------------------------------------------------------------------- */
-/*                                 CREATE ROOT                                */
+/*                                 ROUTER LINK                                */
 /* -------------------------------------------------------------------------- */
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>,
-);
+interface RouterLinkProps extends LinkProps {
+  ref?: React.Ref<HTMLAnchorElement>
+};
+
+function RouterLink({ ref, ...props }: RouterLinkProps) {
+  return <Link ref={ref} {...props} />
+};
+
+export default RouterLink;

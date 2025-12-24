@@ -15,6 +15,16 @@ export const paths = {
   },
   // DASHBOARD
   dashboard: {
+    // OVERVIEW
+    root: `${ROOTS.DASHBOARD}/dashboard`,
+    eCommerce: `${ROOTS.DASHBOARD}/eCommerce`,
+    analytics: `${ROOTS.DASHBOARD}/analytics`,
+    // MANAGMENT
+    user: {
+      list: `${ROOTS.DASHBOARD}/users`,
+      edit: (id: number) => `${ROOTS.DASHBOARD}/users/${id}/edit`,
+      create: `${ROOTS.DASHBOARD}/users/add` 
+    },
     product: {
       list: `${ROOTS.DASHBOARD}/products`,
       edit: (id: number) => `${ROOTS.DASHBOARD}/products/${id}/edit`,
