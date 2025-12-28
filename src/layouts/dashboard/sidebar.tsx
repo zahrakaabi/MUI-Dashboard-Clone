@@ -20,7 +20,7 @@ function AppSidebar() {
 
 /* -------------------------------- RENDERING ------------------------------- */
   return (
-    <Sidebar>
+    <Sidebar style={{ "--sidebar": "0 0% 100%" } as React.CSSProperties }>
       <ScrollArea>
         <SidebarContent>
           <Logo className="mt-3 ml-4 mb-1" />
@@ -29,6 +29,6 @@ function AppSidebar() {
       </ScrollArea>
     </Sidebar>
   )
-}
+};
 
 export default AppSidebar;

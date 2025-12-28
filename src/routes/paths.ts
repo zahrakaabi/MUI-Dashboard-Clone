@@ -22,18 +22,19 @@ export const paths = {
     // MANAGMENT
     user: {
       list: `${ROOTS.DASHBOARD}/users`,
-      edit: (id: number) => `${ROOTS.DASHBOARD}/users/${id}/edit`,
-      create: `${ROOTS.DASHBOARD}/users/add` 
+      create: `${ROOTS.DASHBOARD}/users/add`,
+      edit: `${ROOTS.DASHBOARD}/users/:id/edit`
+      //edit: (id: number) => `${ROOTS.DASHBOARD}/users/${id}/edit`
     },
     product: {
       list: `${ROOTS.DASHBOARD}/products`,
-      edit: (id: number) => `${ROOTS.DASHBOARD}/products/${id}/edit`,
-      create: `${ROOTS.DASHBOARD}/products/add` 
+      create: `${ROOTS.DASHBOARD}/products/add`,
+      edit: `${ROOTS.DASHBOARD}/products/:id/edit`
     },
     blog: {
       list: `${ROOTS.DASHBOARD}/blog`,
-      edit: (id: number) => `${ROOTS.DASHBOARD}/blog/${id}/edit`,
-      create: `${ROOTS.DASHBOARD}/blog/add`
+      create: `${ROOTS.DASHBOARD}/blog/add`,
+      edit: `${ROOTS.DASHBOARD}/blog/:id/edit`
     }
   }
 };

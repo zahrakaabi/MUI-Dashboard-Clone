@@ -1,90 +1,92 @@
-/* -------------------------------------------------------------------------- */
-/*                                DEPENDENCIES                                */
-/* -------------------------------------------------------------------------- */
-// Packages
-import { useId } from 'react';
+// /* -------------------------------------------------------------------------- */
+// /*                                DEPENDENCIES                                */
+// /* -------------------------------------------------------------------------- */
+// // Packages
+import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 // UI Lib Components
-import { Box } from 'lucide-react';
-import { Button, Tooltip } from '@/components/ui';
-
-//import Iconify from '../../iconify';
+import { 
+    Button,
+    Collapsible,
+    CollapsibleContent,
+} from "@/components/ui";
+import { ChevronDown } from "lucide-react";
 
 // Utils
-import type { NavItemProps } from '../types';
+import type { NavItemBaseProps, NavItemProps } from '../types';
 
-/* -------------------------------------------------------------------------- */
-/*                             NAV ITEM COMPONENT                             */
-/* -------------------------------------------------------------------------- */
+// /* -------------------------------------------------------------------------- */
+// /*                             NAV ITEM COMPONENT                             */
+// /* -------------------------------------------------------------------------- */
 function NavItem({
-  title,
-  //path,
-  icon,
-  info,
-  disabled,
-  caption,
-  roles,
-  open,
-  depth = 1,
-  active,
-  hasChild,
-  externalLink,
-  currentRole = 'admin',
+    open, 
+    title,
+    path,
+    active,
+    icon,
+    info,
+    externalLink,
+    hasChild,
+    children,
+    onToggle
 }: NavItemProps) {
-/* --------------------------------- CONSTS --------------------------------- */
-  const subItem = depth !== 1;
-  const id = useId();
+/* -------------------------------- CONSTANTS ------------------------------- */
+   const content = (
+        <Button  variant="ghost"
+        onClick={hasChild ? onToggle : undefined}
+        className={cn(
+            "w-full justify-between cursor-pointer rounded-lg px-3 py-2 text-gray-600 text-sm font-medium transition",
+            "hover:bg-gray-100",
+            open ? "bg-blue-200 text-blue-500 hover:bg-blue-200 hover:text-blue-500" : "",
+            active ? "bg-blue-200 text-blue-500 hover:bg-blue-200 hover:text-blue-500" : ""
+        )}>
+            <div className="flex items-center gap-2">
+                {icon && <div className="w-6 h-6">{icon}</div>}
+                <div className="flex-1 min-w-0 truncate">
+                    <span className="capitalize">{title}</span>
+                </div>
+                {info && <span className="ml-2">{info}</span>}
+            </div>
+            {hasChild && (
+                <ChevronDown
+                    className={cn(
+                        "h-4 w-4 transition-transform duration-200",
+                        open && "rotate-180"
+                    )}
+                />
+            )}
+        </Button>
+   );
 
-  // Hidden item by role
-  if (roles && !roles.includes(`${currentRole}`)) return null;
-
-  const content = (
-    <Button
-      variant="ghost"
-      className={`w-full flex items-center justify-between rounded-lg text-sm ${
-        active ? 'bg-primary/10 text-primary' : 'text-muted-foreground'
-      }`}
-      disabled={disabled}
-    >
-      <Box className="flex items-center gap-2">
-        {icon && <Box className="w-6 h-6">{icon}</Box>}
-
-        <Box className="flex-1 min-w-0 truncate">
-          <span className="capitalize">{title}</span>
-          {caption && (
-            <h1>tooltip</h1>/*<Tooltip content={caption}>
-              <span className="text-xs text-muted-foreground ml-1">{caption}</span>
-            </Tooltip>*/
-          )}
-        </Box>
-
-        {info && <span className="ml-2">{info}</span>}
-      </Box>
-
-      {hasChild && (
-        <h1>test</h1>/*<Iconify
-          width={16}
-          icon={open ? 'eva:arrow-ios-downward-fill' : 'eva:arrow-ios-forward-fill'}
-        />*/
-      )}
-    </Button>
-  );
-
-  if (hasChild) return content;
-
-  if (externalLink)
-    return (
-      <><h1>hrllos</h1>{/*<Link href={path} target="_blank" rel="noopener noreferrer" className="w-full block">
-        {content}
-      </Link>*/}</>
+   if (hasChild) return (
+        <Collapsible open={open} className="flex flex-col gap-1">
+            {content}
+            <CollapsibleContent className="collapsibleContentClass ml-6 space-y-1">
+                {children?.map((child: NavItemBaseProps) => (
+                    <Link key={child.title}
+                    to={child.path}
+                    className="collapsLink block rounded-md px-3 py-2 text-gray-600 text-sm hover:bg-gray-100">
+                        {child.title}
+                    </Link>
+                ))}
+            </CollapsibleContent>
+        </Collapsible>
     );
 
+    if (externalLink)
+      return (
+        <Link to={path} target="_blank" rel="noopener noreferrer" className="w-full block">
+            {content}
+        </Link>
+      );
+
 /* -------------------------------- RENDERING ------------------------------- */
-  return (
-    <><h1>hello</h1>{/*<Link href={path} className="w-full block">
-      {content}
-    </Link>*/}</>
-  );
+    return (
+       <Link to={path} className="w-full block">
+        {content}
+       </Link>
+    );
 };
 
 export default NavItem;

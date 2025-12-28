@@ -8,6 +8,7 @@ import { ProductListView } from './sections';
 
 // Styles
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
 
 /* -------------------------------------------------------------------------- */
 /*                                APP COMPONENT                               */
@@ -16,7 +17,10 @@ function App() {
 /* -------------------------------- RENDERING ------------------------------- */
   return (
     <Layout>
-      <ProductListView />
+      <Routes>
+        <Route path="/" element={<ProductListView />} />
+      </Routes>
+      
       {/*<ProductAddEditView />*/}
     </Layout>
   )

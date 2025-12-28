@@ -1,9 +1,29 @@
-export type CrudPath = {
-  list: string;
-  edit: (id: number) => string;
-  create: string;
+/* -------------------------------------------------------------------------- */
+/*                    NAVIGATION DATA (used by useNavData)                    */
+/* -------------------------------------------------------------------------- */
+export type NavItemBaseProps = {
+  title: string;
+  path: string;
+  icon?: React.ReactElement;
+  info?: React.ReactElement;
+  caption?: string;
+  disabled?: boolean;
+  roles?: string[];
+  children?: NavItemBaseProps[];
 };
 
+export type NavGroupProps = {
+  subheader?: string;
+  items: NavItemBaseProps[];
+};
+
+export type NavProps = {
+  data: NavGroupProps[];
+};
+
+/* -------------------------------------------------------------------------- */
+/*              NAVIGATION UI STATE (used only inside components)             */
+/* -------------------------------------------------------------------------- */
 export type NavItemStateProps = {
   depth?: number;
   open?: boolean;
@@ -13,22 +33,13 @@ export type NavItemStateProps = {
   externalLink?: boolean;
 };
 
-export type NavItemProps = NavItemStateProps & NavItemBaseProps;
+/* -------------------------------------------------------------------------- */
+/*                         NAVIGATION COMPONENT PROPS                         */
+/* -------------------------------------------------------------------------- */
+export type NavItemProps = NavItemStateProps 
+  & NavItemBaseProps
+  & { onToggle?: VoidFunction };
 
-export type NavItemBaseProps = {
-  title: string;
-  path: string | CrudPath;
-  icon?: React.ReactElement;
-  info?: React.ReactElement;
-  caption?: string;
-  disabled?: boolean;
-  roles?: string[];
-  children?: any;
-};
-
-export type NavProps = {
-  data: {
-    subheader: string;
-    items: NavItemBaseProps[];
-  }[];
+export type NavListProps = {
+  data: NavItemBaseProps;
 };
