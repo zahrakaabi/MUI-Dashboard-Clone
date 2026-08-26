@@ -23,19 +23,16 @@ import './App.css';
 function App() {
 /* -------------------------------- RENDERING ------------------------------- */
   return (
-    <Layout>
-      <Routes>
+    <Routes>
+      <Route element={<Layout />}>
         <Route element={<ProductRoutesLayout />}>
-          // Overview
           <Route path="/dashboard" element={<EcommerceView />} />
-
-          // Managment
           <Route path="/dashboard/product" element={<ProductListView />} />
           <Route path="/dashboard/product/add" element={<ProductCreateView />} />
           <Route path="/dashboard/product/:productId/edit" element={<ProductEditView />} />
         </Route>
-      </Routes>
-    </Layout>
+      </Route>
+    </Routes>
   )
 }
 
