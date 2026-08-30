@@ -2,7 +2,7 @@
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
 // Packages
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 // UI Local Components
 import Layout from './layouts/dashboard/layout';
@@ -25,15 +25,17 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/dashboard" element={<EcommerceView />} />
+        
         <Route element={<ProductRoutesLayout />}>
-          <Route path="/dashboard" element={<EcommerceView />} />
           <Route path="/dashboard/product" element={<ProductListView />} />
           <Route path="/dashboard/product/add" element={<ProductCreateView />} />
           <Route path="/dashboard/product/:productId/edit" element={<ProductEditView />} />
         </Route>
       </Route>
     </Routes>
-  )
-}
+  );
+};
 
 export default App;
