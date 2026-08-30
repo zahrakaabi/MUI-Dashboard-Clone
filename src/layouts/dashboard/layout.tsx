@@ -2,7 +2,7 @@
 /*                                DEPENDENCIES                                */
 /* -------------------------------------------------------------------------- */
 // Packages
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useLocation, useOutlet } from "react-router";
 import nProgress from 'nprogress';
@@ -21,20 +21,23 @@ function Layout() {
 /* ---------------------------------- HOOKS --------------------------------- */
   const location = useLocation();
   const outlet = useOutlet();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     nProgress.configure({ parent: "#main-content", showSpinner: false });
   }, [])
 
   useEffect(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+
     nProgress.start();
-    const timer = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       nProgress.done();
     }, 150);
 
     return () => {
-      clearTimeout(timer);
-      nProgress.done();
+      if (timerRef.current) clearTimeout(timerRef.current);
+      nProgress.done(true);
     };
   }, [location.pathname]);
 
